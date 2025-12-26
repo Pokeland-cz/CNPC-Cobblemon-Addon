@@ -28,16 +28,6 @@ import java.util.UUID;
 
 public class ServerEventHandler {
 
-    public static String getBattleActor(Player player){
-        PokemonBattle battle = BattleRegistry.getBattleByParticipatingPlayer((ServerPlayer) player);
-        for(BattleActor actor : battle.getActors()){
-            if(actor instanceof TrainerBattleActor){
-                return "Trainer";
-            }
-        }
-        return "Non trainer (Probably wild)";
-    }
-
     public static Unit onPokemonFainted(BattleFaintedEvent event){
         for(BattlePokemon opponent : event.getKilled().getFacedOpponents()){
             if(event.getKilled().getEntity() == null || opponent.actor.getType() != ActorType.PLAYER) continue;

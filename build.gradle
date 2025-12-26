@@ -48,10 +48,10 @@ subprojects {
         //modCompileOnly "curse.maven:cobblemon-687131:7247586"
         //modCompileOnly files('../lib/CustomNPCs-1.21.1.20251124.jar')
         //Fabric
-        modCompileOnly "curse.maven:cobblemon-687131:7247586"
+        modCompileOnly "curse.maven:cobblemon-687131:6125079"
         modImplementation "curse.maven:ktl-308769:7340876"
         modImplementation files('../lib/CustomNPCs-1.21.1.20251124.jar')
-        implementation files('../lib/Cobblemon-fabric-1.7.2+1.21.1---dev-shadow.jar')
+        //implementation files('../lib/Cobblemon-fabric-1.7.0+1.21.1-20.jar')
         //Neo
 //        modImplementation "curse.maven:cobblemon-687131:7273151"
 //        modImplementation files('../lib/CustomNPCs-Unofficial-NeoForge-1.21.1.20251207.jar')

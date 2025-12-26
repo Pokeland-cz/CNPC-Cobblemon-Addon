@@ -265,7 +265,7 @@ public class PokemonData {
                 break;
             }
         }
-        pokemon.swapHeldItem(heldStack, false, false);
+        pokemon.swapHeldItem(heldStack, false);
 
         entity.setDrops(dropData.getDropTable(pokemon));
 
