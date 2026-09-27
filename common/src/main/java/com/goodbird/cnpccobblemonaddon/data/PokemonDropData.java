@@ -12,6 +12,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
+import com.google.gson.JsonElement;
+import com.mojang.serialization.JsonOps;
+import net.minecraft.core.component.DataComponentMap;
 
 public class PokemonDropData {
     private boolean dropNaturalLoot;
@@ -164,7 +167,8 @@ public class PokemonDropData {
             }
 
             if(!dropStackEntry.getComponents().isEmpty()){
-                entry.setComponents(dropStackEntry.getComponents());
+                JsonElement componentsJson = DataComponentMap.CODEC.encodeStart(JsonOps.INSTANCE, dropStackEntry.getComponents()).getOrThrow();
+                entry.setComponents(componentsJson);
             }
             return dropEntry;
         }
