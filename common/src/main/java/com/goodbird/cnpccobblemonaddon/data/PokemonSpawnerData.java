@@ -24,7 +24,7 @@ public class PokemonSpawnerData {
 
     private String name;
 
-    public PokemonSpawnerData(){
+    public PokemonSpawnerData() {
         redstoneControl = false;
         spawnRadius = 16;
         maxSpawnsPerRound = 2;
@@ -87,29 +87,36 @@ public class PokemonSpawnerData {
         return name;
     }
 
-    public PokemonSpawnEntry getRandomEntry(Level level){
+    public PokemonSpawnEntry getRandomEntry(Level level) {
         Random random = new Random();
         double totalWeight = 0;
         long daytime = level.getDayTime() % 24000;
         for (PokemonSpawnEntry entry : spawnEntries) {
-            if (!entry.isActive) continue;
-            if(!entry.timeMatches(daytime)) continue;
+            if (!entry.isActive)
+                continue;
+            if (!entry.timeMatches(daytime))
+                continue;
             totalWeight += entry.weight;
+        }
+        if (totalWeight <= 0.0) {
+            return null;
         }
         double rnd = random.nextDouble(totalWeight);
         double curSum = 0;
-        for(PokemonSpawnEntry entry : spawnEntries){
-            if (!entry.isActive) continue;
-            if(!entry.timeMatches(daytime)) continue;
-            if(rnd >= curSum && rnd <= curSum+entry.weight){
+        for (PokemonSpawnEntry entry : spawnEntries) {
+            if (!entry.isActive)
+                continue;
+            if (!entry.timeMatches(daytime))
+                continue;
+            if (rnd >= curSum && rnd <= curSum + entry.weight) {
                 return entry;
             }
-            curSum+=entry.weight;
+            curSum += entry.weight;
         }
         return null;
     }
 
-    public CompoundTag serializeNBT(HolderLookup.Provider provider){
+    public CompoundTag serializeNBT(HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         tag.putBoolean("redstoneControl", redstoneControl);
         tag.putInt("spawnRadius", spawnRadius);
@@ -122,7 +129,7 @@ public class PokemonSpawnerData {
         tag.putBoolean("allowWater", allowWater);
         tag.putBoolean("spawnUnder", canSpawnUnder);
         ListTag entries = new ListTag();
-        for(PokemonSpawnEntry entry: spawnEntries){
+        for (PokemonSpawnEntry entry : spawnEntries) {
             entries.add(entry.serializeNBT(provider));
         }
         tag.put("spawnEntries", entries);
@@ -130,7 +137,7 @@ public class PokemonSpawnerData {
         return tag;
     }
 
-    public PokemonSpawnerData parseNBT(HolderLookup.Provider provider, CompoundTag tag){
+    public PokemonSpawnerData parseNBT(HolderLookup.Provider provider, CompoundTag tag) {
         redstoneControl = tag.getBoolean("redstoneControl");
         spawnRadius = tag.getInt("spawnRadius");
         maxSpawnsPerRound = tag.getInt("maxSpawnsPerRound");
@@ -143,7 +150,7 @@ public class PokemonSpawnerData {
         canSpawnUnder = tag.getBoolean("spawnUnder");
         ListTag entries = tag.getList("spawnEntries", 10);
         spawnEntries.clear();
-        for(int i=0;i<entries.size();i++){
+        for (int i = 0; i < entries.size(); i++) {
             spawnEntries.add(new PokemonSpawnEntry().parseNBT(provider, entries.getCompound(i)));
         }
         name = tag.getString("name");
@@ -201,7 +208,7 @@ public class PokemonSpawnerData {
         private EnumSpawnTime spawnTime;
         private boolean isActive;
 
-        public PokemonSpawnEntry(){
+        public PokemonSpawnEntry() {
             entryName = "";
             pokemon = new PokemonData();
             weight = 1;
@@ -214,7 +221,7 @@ public class PokemonSpawnerData {
             this.entryName = entryName;
         }
 
-        public CompoundTag serializeNBT(HolderLookup.Provider provider){
+        public CompoundTag serializeNBT(HolderLookup.Provider provider) {
             CompoundTag tag = new CompoundTag();
             tag.putString("entryName", entryName);
             tag.put("pokemon", pokemon.serializeNBT(provider));
@@ -224,7 +231,7 @@ public class PokemonSpawnerData {
             return tag;
         }
 
-        public PokemonSpawnEntry parseNBT(HolderLookup.Provider provider, CompoundTag tag){
+        public PokemonSpawnEntry parseNBT(HolderLookup.Provider provider, CompoundTag tag) {
             entryName = tag.getString("entryName");
             pokemon.parseNBT(provider, tag.getCompound("pokemon"));
             weight = tag.getInt("weight");
@@ -269,15 +276,17 @@ public class PokemonSpawnerData {
             return this;
         }
 
-        public boolean timeMatches(long daytime){
-            if((daytime>=23000 || daytime<=6000) && spawnTime==EnumSpawnTime.MORNING) return true;
-            if((daytime>=6000 && daytime<=12000) && spawnTime==EnumSpawnTime.DAY) return true;
-            if((daytime>=12000 && daytime<=13000) && spawnTime==EnumSpawnTime.EVENING) return true;
-            if((daytime>=13000 && daytime<=23000) && spawnTime==EnumSpawnTime.NIGHT) return true;
-            return spawnTime==EnumSpawnTime.ALL;
+        public boolean timeMatches(long daytime) {
+            if ((daytime >= 23000 || daytime <= 6000) && spawnTime == EnumSpawnTime.MORNING)
+                return true;
+            if ((daytime >= 6000 && daytime <= 12000) && spawnTime == EnumSpawnTime.DAY)
+                return true;
+            if ((daytime >= 12000 && daytime <= 13000) && spawnTime == EnumSpawnTime.EVENING)
+                return true;
+            if ((daytime >= 13000 && daytime <= 23000) && spawnTime == EnumSpawnTime.NIGHT)
+                return true;
+            return spawnTime == EnumSpawnTime.ALL;
         }
-
-
 
         public boolean isActive() {
             return isActive;
