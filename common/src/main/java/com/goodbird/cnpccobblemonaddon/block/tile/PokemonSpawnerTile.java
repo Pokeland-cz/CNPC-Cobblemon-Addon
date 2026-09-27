@@ -88,10 +88,12 @@ public class PokemonSpawnerTile extends BlockEntity {
         PokemonSpawnerData data = tile.getData();
         if(data.getSpawnEntries().isEmpty()) return;
         if (!level.hasNeighborSignal(pos) && data.isRedstoneControl()) return;
-        if (level.getEntitiesOfClass(Player.class, tile.getBlockState().getShape(level, pos).bounds().move(pos).inflate(data.getPlayerDetectionRange())).isEmpty())
-            return;
-
         long curTime = level.getGameTime();
+        if (tile.nextSpawnTime > curTime) return;
+
+        boolean hasPlayer = level.hasNearbyAlivePlayer(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, data.getPlayerDetectionRange());
+        if (!hasPlayer) return;
+
         if (tile.nextSpawnTime < curTime) {
             tile.nextSpawnTime = curTime + level.random.nextIntBetweenInclusive(data.getTickRangeMin(), data.getTickRangeMax());
         }

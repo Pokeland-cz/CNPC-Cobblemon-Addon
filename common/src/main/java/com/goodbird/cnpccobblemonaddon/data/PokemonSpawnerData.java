@@ -90,16 +90,17 @@ public class PokemonSpawnerData {
     public PokemonSpawnEntry getRandomEntry(Level level){
         Random random = new Random();
         double totalWeight = 0;
+        long daytime = level.getDayTime() % 24000;
         for (PokemonSpawnEntry entry : spawnEntries) {
             if (!entry.isActive) continue;
-            if(!entry.timeMatches(level)) continue;
+            if(!entry.timeMatches(daytime)) continue;
             totalWeight += entry.weight;
         }
         double rnd = random.nextDouble(totalWeight);
         double curSum = 0;
         for(PokemonSpawnEntry entry : spawnEntries){
             if (!entry.isActive) continue;
-            if(!entry.timeMatches(level)) continue;
+            if(!entry.timeMatches(daytime)) continue;
             if(rnd >= curSum && rnd <= curSum+entry.weight){
                 return entry;
             }
@@ -268,14 +269,15 @@ public class PokemonSpawnerData {
             return this;
         }
 
-        public boolean timeMatches(Level level){
-            long daytime = level.getDayTime()%24000;
+        public boolean timeMatches(long daytime){
             if((daytime>=23000 || daytime<=6000) && spawnTime==EnumSpawnTime.MORNING) return true;
             if((daytime>=6000 && daytime<=12000) && spawnTime==EnumSpawnTime.DAY) return true;
             if((daytime>=12000 && daytime<=13000) && spawnTime==EnumSpawnTime.EVENING) return true;
             if((daytime>=13000 && daytime<=23000) && spawnTime==EnumSpawnTime.NIGHT) return true;
             return spawnTime==EnumSpawnTime.ALL;
         }
+
+
 
         public boolean isActive() {
             return isActive;
